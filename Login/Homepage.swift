@@ -5,23 +5,42 @@ struct HomePageView: View {
     @State private var medicationReminders: [MedicationReminder] = []
 
     var body: some View {
-        ZStack{
-            Color(.systemTeal).brightness(0.70).ignoresSafeArea()
+        ZStack {
+            Color(.white).brightness(0.70).ignoresSafeArea()
             ScrollView {
                 // Week Scroller
                 WeekScrollerView(currentWeek: $currentWeek)
                     .frame(height: 150)
-                
+
                 // Circular Loading View with Embryo Image
                 myCircularLoadingView(currentWeek: $currentWeek)
                     .frame(width: 150, height: 150)
                     .padding()
-                
+
+                // Heading for Daily Medicine
+                Text("Daily Medicine")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+
                 // Horizontal ScrollView of Large Square Buttons
                 LargeSquareButtonsScrollView()
-                
+
                 // Medication Reminder Section
                 MedicationReminderSection(medicationReminders: $medicationReminders)
+
+                // Upcoming Medicine Reminders
+                UpcomingMedicineReminders()
+            }
+
+            // Settings Logo in the Top Right Corner
+            HStack {
+                Spacer()
+                Image(systemName: "gear")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
+                    .padding()
             }
         }
     }
@@ -33,7 +52,6 @@ struct MedicationReminder {
     var isBeforeFood: Bool
     var selectedTime: Date
 }
-
 
 struct WeekScrollerView: View {
     @Binding var currentWeek: Double
@@ -76,15 +94,13 @@ struct myCircularLoadingView: View {
                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
                     .foregroundColor(Color.blue)
                     .rotationEffect(Angle(degrees: 270))
-                
+
                 Image(systemName: "figure.child.circle.fill")
                     .resizable()
                     .frame(width: 100, height: 100)
                     .foregroundColor(.blue)
-                    
-            }
 
-            
+            }
         }
     }
 }
@@ -114,40 +130,49 @@ struct LargeSquareButtonsScrollView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
-                ForEach(1...5, id: \.self) { index in
-                    let destinationView = Text("Screen \(index)")
-                    let systemImageName = systemImageName(for: index)
-
-                    LargeSquareButton(systemImageName: systemImageName, destinationScreen: destinationView)
-                        .onTapGesture {
-                            // Handle navigation here
-                            print("Button \(index) tapped")
-                        }
-                }
+                // Additional Box for Pro Health
+                LargeSquareBox(title: "Mom's recipes", color: .teal, symbolName: "fork.knife.circle")
+                // Additional Box for Medicine
+                LargeSquareBox(title: "Medicine", color: .teal, symbolName: "pills.fill")
+                // Additional Box for Appointments
+                LargeSquareBox(title: "Appointments", color: .teal, symbolName: "calendar")
+                // Additional Box for Exercise
+                LargeSquareBox(title: "Exercise", color: .teal, symbolName: "bolt.fill")
             }
             .padding()
         }
     }
+}
 
-    func systemImageName(for index: Int) -> String {
-        switch index {
-        case 1:
-            return "heart.fill"
-        case 2:
-            return "star.fill"
-        case 3:
-            return "bolt.fill"
-        case 4:
-            return "leaf.fill"
-        case 5:
-            return "flame.fill"
-        default:
-            return "heart.fill"
+struct LargeSquareBox: View {
+    var title: String
+    var color: Color
+    var symbolName: String
+
+    var body: some View {
+        VStack {
+            Rectangle()
+                .fill(color)
+                .frame(width: 120, height: 120)
+                .overlay(
+                    Image(systemName: symbolName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.white)
+                        .padding(.top, 25),
+                    alignment: .top
+                )
+                .overlay(
+                    Text(title)
+                        .foregroundColor(.white)
+                        .font(.headline)
+                        .padding(.top, 50)
+                )
+                .cornerRadius(10)
         }
     }
 }
-
-
 
 struct MedicationReminderSection: View {
     @Binding var medicationReminders: [MedicationReminder]
@@ -165,6 +190,24 @@ struct MedicationReminderSection: View {
                     }
                 }
                 .padding(.horizontal)
+            }
+        }
+    }
+}
+
+struct UpcomingMedicineReminders: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("Upcoming Reminders")
+                .font(.headline)
+                .foregroundColor(.blue)
+
+            // Here you can add the logic to fetch and display upcoming reminders from MedBuddy
+            // Sample content
+            ForEach(1...3, id: \.self) { index in
+                Text("Medicine \(index)")
+                    .font(.subheadline)
+                    .foregroundColor(.black)
             }
         }
     }
@@ -210,12 +253,6 @@ struct HomePageView_Previews: PreviewProvider {
         HomePageView()
     }
 }
-
-
-
-
-
-
 
 
 

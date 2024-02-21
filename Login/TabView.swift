@@ -14,7 +14,8 @@ struct TabView: View {
     "house",
     "cross.case",
     "heart.circle",
-    "shared.with.you"
+    "shared.with.you",
+    
     ]
     var body: some View {
         VStack{
@@ -27,7 +28,7 @@ struct TabView: View {
                             HomePageView()
                         }.navigationTitle("Home")
                     }
-                    NavigationLink("Hello", destination: HomePageView())
+                  
                 case 1:
                     NavigationView{
                         VStack{
@@ -39,7 +40,7 @@ struct TabView: View {
                     NavigationView{
                         VStack{
                             Text("")
-                        }.navigationTitle("ProHealth")
+                        }.navigationTitle("")
                     }
                 case 3:
                     NavigationView{

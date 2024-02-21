@@ -1,77 +1,105 @@
-//
-//  vitals__.swift
-//  Login
-//
-//  Created by user50a on 10/01/24.
-//
-
 import SwiftUI
 
-struct vitals__: View {
+struct VitalsPage: View {
+    // Sample data
+    @State private var walkingDistance: Double = 3.5 // in kilometers
+    @State private var stepsCount: Int = 5000
+    @State private var heartRate: Int = 75
+    @State private var hoursOfSleep: Double = 7.5
+
     var body: some View {
-        ZStack {
-            Color(.systemTeal)
-                .brightness(0.70)
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                Text("Hello User")
-                    .font(.largeTitle)
-                    .padding(.top, 50)
-                
-                Spacer()
-                
-                HStack(spacing: 20) {
-                    SquareButton(imageName: "heart.fill", buttonText: "Heart Rate", number: 90, subtitle: "bpm")
-                    SquareButton(imageName: "figure.walk", buttonText: "Walking", number: 32, subtitle: "km")
+        NavigationView {
+            ScrollView {
+                VStack {
+                    HStack {
+                        Button(action: {
+                            // Handle back button action
+                        }) {
+                            Image(systemName: "arrow.left.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(Color.blue)
+                        }
+                        .padding(.top, 20)
+                        .padding(.leading, 20)
+
+                        
+
+                        Text("Vitals")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.top, 20)
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, alignment: .center) // Center align the text
+
+                        Spacer()
+                    }
+
+                    HStack(spacing: 20) {
+                        VitalsSquareCard(title: "Walking Distance", value: "\(walkingDistance) km", color: Color.blue.opacity(0.6))
+                        VitalsSquareCard(title: "Heart Rate", value: "\(heartRate) bpm", color: Color.red.opacity(0.7))
+                    }
+                    .padding()
+
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.2))
+                            .frame(width: UIScreen.main.bounds.width / 2.5, height: 150)
+                            .overlay(
+                                Text("Vitals")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            )
+                            .offset(y: -50) // Adjust the offset to move the central circle up
+
+                        HStack(spacing: 20) {
+                            VitalsSquareCard(title: "Steps", value: "\(stepsCount)", color: Color.green.opacity(0.8))
+                            VitalsSquareCard(title: "Sleep", value: "\(hoursOfSleep) hrs", color: Color.purple.opacity(0.8))
+                        }
+                        .padding()
+                    }
                 }
-                .padding(.vertical, 20)
-                
-                HStack(spacing: 20) {
-                    SquareButton(imageName: "bolt.fill", buttonText: "Exercise", number: 5, subtitle: "Hrs")
-                    SquareButton(imageName: "zzz", buttonText: "Sleep", number: 7, subtitle: "Hrs")
-                }
-                .padding(.bottom, 20)
-                
-                Spacer()
             }
-            .navigationBarTitle(Text(""), displayMode: .inline)
+            .navigationBarHidden(true)
+            .foregroundColor(.black)
+            .background(Color.white.opacity(0.1)) // You can use a custom color if needed
         }
     }
 }
 
-struct SquareButton: View {
-    var imageName: String
-    var buttonText: String
-    var number: Int
-    var subtitle: String
-    
+struct VitalsSquareCard: View {
+    var title: String
+    var value: String
+    var color: Color
+
     var body: some View {
-        Button(action: {
-            // Button action
-        }) {
-            VStack {
-                Image(systemName: imageName)
-                    .font(.system(size: 30))
-                    .foregroundColor(.white)
-                    .padding(20)
-                    .background(Color.blue)
-                    .cornerRadius(15)
-                
-                Text(buttonText)
-                    .foregroundColor(.blue)
-                    .padding(.top, 5)
-                
-                Text("\(number)")
-                    .font(.title)
-                    .fontWeight(.bold)
-                
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
+        VStack {
+            Circle()
+                .fill(color)
+                .frame(width: UIScreen.main.bounds.width / 2.2, height: 250)
+                .overlay(
+                    VStack {
+                        Text(value)
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .padding(.bottom, 20)
+
+                        Text(title)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                )
         }
-        .frame(maxWidth: .infinity)
+        .cornerRadius(20)
+        .shadow(radius: 5)
+    }
+}
+
+struct VitalsPage_Previews: PreviewProvider {
+    static var previews: some View {
+        VitalsPage()
     }
 }
 
@@ -103,9 +131,5 @@ struct SquareButton: View {
 
 
 
-
-                
-    #Preview {
-        vitals__()
-                }
+     
        
